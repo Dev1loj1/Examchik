@@ -4,6 +4,10 @@ project(Examchik)
 
 set(CMAKE_CXX_STANDARD 11)
 
+# -----------------------------
+# Статическая библиотека
+# -----------------------------
+
 add_library(
         triangle
         STATIC
@@ -16,6 +20,10 @@ target_include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# -----------------------------
+# Основная программа
+# -----------------------------
+
 add_executable(
         Examchik
         main.cpp
@@ -26,3 +34,34 @@ target_link_libraries(
         PRIVATE
         triangle
 )
+
+# -----------------------------
+# GoogleTest
+# -----------------------------
+
+include(FetchContent)
+
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.zip
+)
+
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(
+        TriangleTests
+        tests/TriangleTests.cpp
+)
+
+target_link_libraries(
+        TriangleTests
+        PRIVATE
+        triangle
+        GTest::gtest_main
+)
+
+include(GoogleTest)
+
+gtest_discover_tests(TriangleTests)
